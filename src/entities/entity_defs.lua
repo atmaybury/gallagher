@@ -10,6 +10,7 @@ ENTITY_DEFS = {
     -- player entity
     ['player'] = {
         --TODO: Entity speed
+        hp = 5,
         animations = {
             ['straight'] = {
                 texture = 'player',
@@ -29,7 +30,8 @@ ENTITY_DEFS = {
     -- enemy entities
     ['enemy-basic'] = {
         --TODO: Entity speed
-         animations = {
+        hp = 3,
+        animations = {
             ['straight'] = {
                 texture = 'enemy-basic',
                 frames = {2}

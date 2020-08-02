@@ -18,11 +18,12 @@ function PlayState:init()
     self.projectiles = {}
     
     -- init player
+    local def = ENTITY_DEFS['player']
     self.player = Player {
-        animations = ENTITY_DEFS['player'].animations,
+        animations = def.animations,
         x = VIRTUAL_WIDTH / 2 - SPRITE_SIZE / 2,
         y = VIRTUAL_HEIGHT - (SPRITE_SIZE * 3),
-        hp = 5
+        hp = def.hp
     }
 
     self.playerHealthBar = ProgressBar {

@@ -18,7 +18,7 @@ function Entity:init(def)
     self.height = SPRITE_SIZE
 
     self.animations = self:createAnimations(def.animations)
-    self.hp = def.health or 10
+    self.hp = def.hp or 10
 
     self:changeAnimation('straight')
 
