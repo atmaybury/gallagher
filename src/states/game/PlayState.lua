@@ -70,8 +70,7 @@ function PlayState:update(dt)
 
     -- fire projectiles
     if love.keyboard.isDown('space') or joystick:getGamepadAxis('triggerright') == 1 then
-        --TODO add timer to regulate firing
-        self.player:fire(self.projectiles) 
+        self.player:fire(self.projectiles, dt) 
     end
     
     --[[

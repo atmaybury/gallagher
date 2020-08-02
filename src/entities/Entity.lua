@@ -24,10 +24,16 @@ function Entity:init(def)
 
     local anim = self.currentAnimation
 
+    -- particle effect system
     self.psystem = love.graphics.newParticleSystem(gTextures['particle'], 64)
     self.psystem:setParticleLifetime(1, 3)
     self.psystem:setLinearAcceleration(-15, 0 , 15, 80)
     self.psystem:setEmissionArea('normal', 10, 10)
+
+    --self.cooldown = 1 / FIRING_RATE
+    self.cooldown = .2
+    -- starts at cooldown value so can always shoot immediately
+    self.cooldownTimer = self.cooldown
 end
 
 
@@ -84,12 +90,18 @@ end
 
 
 -- fire projectile
-function Entity:fire(projectiles)
-    table.insert(projectiles, Projectile {
-        x = self.x,
-        y = self.y - SPRITE_SIZE,
-        dy = -PROJECTILE_SPEED
-    })
+function Entity:fire(projectiles, dt)
+    if self.cooldownTimer >= self.cooldown then
+        table.insert(projectiles, Projectile {
+            x = self.x,
+            y = self.y - SPRITE_SIZE,
+            dy = -PROJECTILE_SPEED
+        })
+        self.cooldownTimer = (self.cooldownTimer + dt) % self.cooldown
+        print(self.cooldownTimer)
+    else
+        self.cooldownTimer = self.cooldownTimer + dt
+    end
 end
 
 
