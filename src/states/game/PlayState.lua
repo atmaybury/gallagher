@@ -18,6 +18,9 @@ function PlayState:init()
     self.projectiles = {}
 
     score = 0
+    self.hits = 0
+    self.misses = 0
+    self.accuracy = 0
     
     -- init player
     local def = ENTITY_DEFS['player']
@@ -45,6 +48,9 @@ function PlayState:update(dt)
     -- scrolling stars
     self.stars1Scroll = (self.stars1Scroll + STARS1_SCROLL_SPEED * dt) % STARS1_LOOP_POINT
     self.stars2Scroll = (self.stars2Scroll + STARS2_SCROLL_SPEED * dt) % STARS2_LOOP_POINT
+
+    -- update accuracy
+    self.accuracy = math.floor(self.hits * 100 / (self.hits + self.misses))
    
     --[[
         INPUT CHECKS
@@ -107,7 +113,10 @@ function PlayState:update(dt)
     for j, projectile in pairs(self.projectiles) do
 
         -- check if in bounds
-        if projectile.y < 0 or projectile.y > VIRTUAL_HEIGHT then
+        if projectile.y < 0 then
+            projectile:destroy(self.projectiles, j)
+            self.misses = self.misses + 1
+        elseif projectile.y > VIRTUAL_HEIGHT then
             projectile:destroy(self.projectiles, j)
         end
 
@@ -121,11 +130,13 @@ function PlayState:update(dt)
         -- enemy/projectile
         for k, enemy in pairs(self.enemies) do
             if enemy:collides(projectile) then
+                if projectile.dy < 0 then 
+                    self.hits = self.hits + 1
+                end
                 enemy:hit(self.enemies, k)
                 projectile:destroy(self.projectiles, j)
                 gSounds['start']:stop()
                 gSounds['start']:play()
-                print(score)
             end
         end
     end

@@ -1,11 +1,11 @@
 --[[
-    GD50
-    Legend of Zelda
-
-    -- Animation Class --
+    FINAL PROJECT
+    2020
 
     Author: Colton Ogden
     cogden@cs50.harvard.edu
+
+    -- Animation Class --
 ]]
 
 Animation = Class{}

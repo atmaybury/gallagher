@@ -1,9 +1,11 @@
 --[[
-    GD50
-    Pokemon
+    FINAL PROJECT
+    2020
 
     Author: Colton Ogden
     cogden@cs50.harvard.edu
+
+    -- Progress Bar -- 
 ]]
 
 ProgressBar = Class{}

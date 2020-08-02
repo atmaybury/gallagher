@@ -1,3 +1,13 @@
+--[[
+    FINAL PROJECT
+    2020
+
+    Author: Colton Ogden
+    cogden@cs50.harvard.edu
+
+    -- State Machine --
+]]
+
 StateMachine = Class{}
 
 function StateMachine:init(states)
