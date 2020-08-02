@@ -18,11 +18,10 @@ function Entity:init(def)
     self.height = SPRITE_SIZE
 
     self.animations = self:createAnimations(def.animations)
-    self.hp = def.hp or 10
-
     self:changeAnimation('straight')
-
     local anim = self.currentAnimation
+
+    self.hp = def.hp
 
     -- particle effect system
     self.psystem = love.graphics.newParticleSystem(gTextures['particle'], 64)
@@ -90,12 +89,20 @@ end
 
 
 -- fire projectile
-function Entity:fire(projectiles, dt)
+function Entity:fire(projectiles, dt, dy, dir)
+    -- set projectile.y based on whether its from player(up) or enemy(down)
+    local tempY
+    if dir == 'up' then
+        tempY = self.y - 1
+    else
+        tempY = self.y + SPRITE_SIZE
+    end
+    -- fire projectile
     if self.cooldownTimer >= self.cooldown then
         table.insert(projectiles, Projectile {
-            x = self.x,
-            y = self.y - SPRITE_SIZE,
-            dy = -PROJECTILE_SPEED
+            x = self.x + SPRITE_SIZE / 2,
+            y = tempY,
+            dy = dy
         })
         self.cooldownTimer = (self.cooldownTimer + dt) % self.cooldown
     else

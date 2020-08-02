@@ -8,13 +8,15 @@
 EntitySpawner = Class{}
 
 function EntitySpawner:spawn(enemies)
-    -- init enemy
-    local def = ENTITY_DEFS['enemy-basic']
-    table.insert(enemies, Enemy {
-        animations = def.animations,
-        x = math.random(SPRITE_SIZE, VIRTUAL_WIDTH - SPRITE_SIZE),
-        y = ENEMY_SPAWN_Y,
-        dy = ENEMY_SPEED,
-        hp = def.hp
-    })
+    -- init up to five enemies
+    for i = 1, math.random(5) do
+        local def = ENTITY_DEFS['enemy-basic']
+        table.insert(enemies, Enemy {
+            animations = def.animations,
+            x = math.random(SPRITE_SIZE, VIRTUAL_WIDTH - SPRITE_SIZE),
+            y = ENEMY_SPAWN_Y,
+            dy = ENEMY_SPEED,
+            hp = def.hp
+        })
+    end
 end

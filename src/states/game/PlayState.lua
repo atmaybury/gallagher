@@ -84,7 +84,7 @@ function PlayState:update(dt)
     -- fire projectiles
     if love.keyboard.isDown('space') 
     or joystick and joystick:getGamepadAxis('triggerright') == 1 then
-        self.player:fire(self.projectiles, dt) 
+        self.player:fire(self.projectiles, dt, -PROJECTILE_SPEED, 'up') 
     end
     
     --[[
@@ -94,7 +94,7 @@ function PlayState:update(dt)
     self.playerHealthBar:setValue(self.player.hp)
     
     for i, enemy in pairs(self.enemies) do
-        enemy:update(dt)
+        enemy:update(self.projectiles, dt)
     end
     
     for i, projectile in pairs(self.projectiles) do
@@ -132,6 +132,7 @@ function PlayState:update(dt)
             if enemy:collides(projectile) then
                 if projectile.dy < 0 then 
                     self.hits = self.hits + 1
+                    print(self.accuracy)
                 end
                 enemy:hit(self.enemies, k)
                 projectile:destroy(self.projectiles, j)
@@ -150,15 +151,9 @@ function PlayState:update(dt)
         elseif enemy:collides(self.player) then
             enemy:hit(self.enemies, k)
             self.player:hit()
-            print(self.player.hp)
             gSounds['start']:stop()
             gSounds['start']:play()
         end
-    end
-
-    -- spawn new enemies
-    if next(self.enemies) == nil then
-        self.entitySpawner:spawn(self.enemies)
     end
 end
 
