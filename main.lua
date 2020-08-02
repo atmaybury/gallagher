@@ -28,8 +28,6 @@ function love.load()
     else print('No gamepad') end
 
     love.keyboard.keysPressed = {}
-
-    print("loaded")
 end
 
 

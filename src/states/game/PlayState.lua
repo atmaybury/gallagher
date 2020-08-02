@@ -16,6 +16,8 @@ function PlayState:init()
     self.entitySpawner = EntitySpawner{}
     self.enemies = {}
     self.projectiles = {}
+
+    score = 0
     
     -- init player
     local def = ENTITY_DEFS['player']
@@ -123,6 +125,7 @@ function PlayState:update(dt)
                 projectile:destroy(self.projectiles, j)
                 gSounds['start']:stop()
                 gSounds['start']:play()
+                print(score)
             end
         end
     end
