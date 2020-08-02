@@ -15,7 +15,7 @@ end
 
 function StartState:update()
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return')
-    or joystick:isGamepadDown('a') then
+    or joystick and joystick:isGamepadDown('a') then
         gStateStack:pop()
         gStateStack:push(PlayState())
     end

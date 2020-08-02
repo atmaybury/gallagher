@@ -47,29 +47,34 @@ function PlayState:update(dt)
         INPUT CHECKS
     ]]
     -- direction inputs    
-    if love.keyboard.isDown('left') or joystick:getGamepadAxis('leftx') < -0.5 then
+    if love.keyboard.isDown('left')
+    or joystick and joystick:getGamepadAxis('leftx') < -0.5 then
         if self.player.x > 0 then
             self.player.x = self.player.x - PLAYER_MOVE_SPEED * dt
         end
     end
-    if love.keyboard.isDown('right') or joystick:getGamepadAxis('leftx') > 0.5 then
+    if love.keyboard.isDown('right')
+    or joystick and joystick:getGamepadAxis('leftx') > 0.5 then
         if self.player.x < VIRTUAL_WIDTH - SPRITE_SIZE then
             self.player.x = self.player.x + PLAYER_MOVE_SPEED * dt
         end
     end
-    if love.keyboard.isDown('up') or joystick:getGamepadAxis('lefty') < -0.5 then
+    if love.keyboard.isDown('up') 
+    or joystick and joystick:getGamepadAxis('lefty') < -0.5 then
         if self.player.y > 0 then
             self.player.y = self.player.y - PLAYER_MOVE_SPEED * dt
         end
     end
-    if love.keyboard.isDown('down') or joystick:getGamepadAxis('lefty') > 0.5 then
+    if love.keyboard.isDown('down')
+    or joystick and joystick:getGamepadAxis('lefty') > 0.5 then
         if self.player.y < VIRTUAL_HEIGHT - SPRITE_SIZE then
             self.player.y = self.player.y + PLAYER_MOVE_SPEED * dt
         end
     end
 
     -- fire projectiles
-    if love.keyboard.isDown('space') or joystick:getGamepadAxis('triggerright') == 1 then
+    if love.keyboard.isDown('space') 
+    or joystick and joystick:getGamepadAxis('triggerright') == 1 then
         self.player:fire(self.projectiles, dt) 
     end
     

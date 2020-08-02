@@ -98,7 +98,6 @@ function Entity:fire(projectiles, dt)
             dy = -PROJECTILE_SPEED
         })
         self.cooldownTimer = (self.cooldownTimer + dt) % self.cooldown
-        print(self.cooldownTimer)
     else
         self.cooldownTimer = self.cooldownTimer + dt
     end
