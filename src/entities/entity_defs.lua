@@ -45,5 +45,57 @@ ENTITY_DEFS = {
                 frames = {3}
             }
         }
+    },
+    
+    -- player-large
+    ['player-large'] = {
+        hp = 3,
+        animations = {
+            ['straight'] = {
+                texture = 'player-large',
+                frames = {1, 2, 3},
+                interval = .15,
+                looping = true
+            }
+        }
+    },
+
+    -- enemy-large
+    ['enemy-large'] = {
+        hp = 3,
+        animations = {
+            ['straight'] = {
+                texture = 'enemy-large',
+                frames = {1, 2, 3},
+                interval = .15,
+                looping = true
+            }
+        }
+    },
+
+    -- player-medium
+    ['player-medium'] = {
+        hp = 3,
+        animations = {
+            ['straight'] = {
+                texture = 'player-medium',
+                frames = {1, 2, 3},
+                interval = .15,
+                looping = true
+            }
+        }
+    },
+
+    -- enemy-medium
+    ['enemy-medium'] = {
+        hp = 3,
+        animations = {
+            ['straight'] = {
+                texture = 'enemy-medium',
+                frames = {1, 2, 3},
+                interval = .15,
+                looping = true
+            }
+        }
     }
 }

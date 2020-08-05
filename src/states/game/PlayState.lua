@@ -22,23 +22,37 @@ function PlayState:init()
     self.misses = 0
     self.accuracy = 0
     
-    -- init player
+    --[[ init player
     local def = ENTITY_DEFS['player']
     self.player = Player {
         animations = def.animations,
         x = VIRTUAL_WIDTH / 2 - SPRITE_SIZE / 2,
-        y = VIRTUAL_HEIGHT - (SPRITE_SIZE * 3),
+        y = BOTTOM_EDGE - (SPRITE_SIZE * 3),
         hp = def.hp
     }
+    ]]
+    
+    --
+    local def = ENTITY_DEFS['player-medium']
+    self.player = Player {
+        animations = def.animations,
+        x = (VIRTUAL_WIDTH / 2) - 32,
+        y = BOTTOM_EDGE - 92,
+            hp = def.hp
+    }
+    
 
+    --- panel to show health / score / accuracy
+    self.panel = Panel(0, VIRTUAL_HEIGHT - PANEL_HEIGHT, VIRTUAL_WIDTH, PANEL_HEIGHT)
+    
     self.playerHealthBar = ProgressBar {
-        x = 50,
-        y = VIRTUAL_HEIGHT - 6 - 50,
+        x = PANEL_HEIGHT / 2,
+        y = VIRTUAL_HEIGHT - 3 - PANEL_HEIGHT / 2,
         width = 152,
         height = 6,
         color = {r = .74, g = .12, b = .12},
-        value = self.player.hp,
-        max = 10
+        value = self.player.currentHP,
+        max = self.player.hp
     }
 end
 
@@ -50,7 +64,11 @@ function PlayState:update(dt)
     self.stars2Scroll = (self.stars2Scroll + STARS2_SCROLL_SPEED * dt) % STARS2_LOOP_POINT
 
     -- update accuracy
-    self.accuracy = math.floor(self.hits * 100 / (self.hits + self.misses))
+    if self.hits + self.misses > 0 then
+        self.accuracy = math.floor(self.hits * 100 / (self.hits + self.misses))
+    else
+        self.accuracy = 0
+    end
    
     --[[
         INPUT CHECKS
@@ -76,7 +94,7 @@ function PlayState:update(dt)
     end
     if love.keyboard.isDown('down')
     or joystick and joystick:getGamepadAxis('lefty') > 0.5 then
-        if self.player.y < VIRTUAL_HEIGHT - SPRITE_SIZE then
+        if self.player.y < BOTTOM_EDGE - SPRITE_SIZE then
             self.player.y = self.player.y + PLAYER_MOVE_SPEED * dt
         end
     end
@@ -91,7 +109,7 @@ function PlayState:update(dt)
         UPDATES
     ]]
     self.player:update(dt)
-    self.playerHealthBar:setValue(self.player.hp)
+    self.playerHealthBar:setValue(self.player.currentHP)
     
     for i, enemy in pairs(self.enemies) do
         enemy:update(self.projectiles, dt)
@@ -116,7 +134,7 @@ function PlayState:update(dt)
         if projectile.y < 0 then
             projectile:destroy(self.projectiles, j)
             self.misses = self.misses + 1
-        elseif projectile.y > VIRTUAL_HEIGHT then
+        elseif projectile.y > BOTTOM_EDGE then
             projectile:destroy(self.projectiles, j)
         end
 
@@ -127,26 +145,26 @@ function PlayState:update(dt)
             gSounds['start']:play()
         end
         
-        -- enemy/projectile
+        -- projectile/enemy
         for k, enemy in pairs(self.enemies) do
             if enemy:collides(projectile) then
+                -- dy will be negative if fired by player
                 if projectile.dy < 0 then 
                     self.hits = self.hits + 1
-                    print(self.accuracy)
                 end
                 enemy:hit(self.enemies, k)
                 projectile:destroy(self.projectiles, j)
-                gSounds['start']:stop()
-                gSounds['start']:play()
             end
         end
     end
 
     -- enemies
     for k, enemy in pairs(self.enemies) do
+
         -- check enemy is in bounds
         if enemy.y > VIRTUAL_HEIGHT then
             enemy:destroy(self.enemies, k)
+
         -- player/enemy
         elseif enemy:collides(self.player) then
             enemy:hit(self.enemies, k)
@@ -160,12 +178,17 @@ end
 
 function PlayState:render()
 
+    -- background color
+    love.graphics.setColor(unpack(GREEN1))
+    love.graphics.rectangle('fill', 0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+
     -- scrolling stars
+    love.graphics.setColor(unpack(GREEN4))
     love.graphics.draw(gTextures['stars1'], 0, -VIRTUAL_HEIGHT + self.stars1Scroll) 
     love.graphics.draw(gTextures['stars2'], 0, -VIRTUAL_HEIGHT + self.stars2Scroll) 
+    love.graphics.setColor(1, 1, 1, 1)
 
     self.player:render()
-    self.playerHealthBar:render()
 
     -- render enemies
     for i, enemy in pairs(self.enemies) do
@@ -176,4 +199,13 @@ function PlayState:render()
     for i, projectile in pairs(self.projectiles) do
         projectile:render()
     end
+
+    -- render panel with health bar / score / accuracy
+    self.panel:render()
+    self.playerHealthBar:render()
+    love.graphics.setFont(gFonts['pixel-operator'])
+    love.graphics.setColor(unpack(GREEN4))
+    love.graphics.print("Score: " .. tostring(score), VIRTUAL_WIDTH / 2, BOTTOM_EDGE + 5)
+    love.graphics.print("Accuracy: " .. tostring(self.accuracy), VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT - PANEL_HEIGHT / 2)
+    love.graphics.setColor(1, 1, 1, 1)
 end

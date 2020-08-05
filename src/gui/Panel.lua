@@ -20,18 +20,19 @@ function Panel:init(x, y, width, height)
 end
 
 function Panel:update(dt)
-
 end
+
 
 function Panel:render()
     if self.visible then
-        love.graphics.setColor(1, 1, 1, 1)
+        love.graphics.setColor(unpack(GREEN4))
         love.graphics.rectangle('fill', self.x, self.y, self.width, self.height, 3)
-        love.graphics.setColor(.21, .21, .21, 1)
+        love.graphics.setColor(unpack(GREEN2))
         love.graphics.rectangle('fill', self.x + 2, self.y + 2, self.width - 4, self.height - 4, 3)
         love.graphics.setColor(1, 1, 1, 1)
     end
 end
+
 
 function Panel:toggle()
     self.visible = not self.visible

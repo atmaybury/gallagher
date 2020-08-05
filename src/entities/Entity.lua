@@ -17,17 +17,22 @@ function Entity:init(def)
     self.width = SPRITE_SIZE
     self.height = SPRITE_SIZE
 
+    -- animations
     self.animations = self:createAnimations(def.animations)
     self:changeAnimation('straight')
     local anim = self.currentAnimation
 
+    -- max health and current health
     self.hp = def.hp
+    self.currentHP = self.hp
 
+    --[[
     -- particle effect system
     self.psystem = love.graphics.newParticleSystem(gTextures['particle'], 64)
     self.psystem:setParticleLifetime(1, 3)
-    self.psystem:setLinearAcceleration(-15, 0 , 15, 80)
+    self.psystem:setLinearAcceleration(-15, -WORLD_SPEED, 15, 0)
     self.psystem:setEmissionArea('normal', 10, 10)
+    ]]
 
     --self.cooldown = 1 / FIRING_RATE
     self.cooldown = .2
@@ -38,7 +43,9 @@ end
 
 function Entity:update(dt)
     if self.currentAnimation then self.currentAnimation:update(dt) end
+    --[[
     self.psystem:update(dt)
+    ]]
 
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
@@ -57,8 +64,9 @@ function Entity:render()
     -- render sprite
     local anim = self.currentAnimation
     love.graphics.draw(gTextures[anim.texture], gFrames[anim.texture][anim:getCurrentFrame()], self.x, self.y)
-    -- render particle effects
-    love.graphics.draw(self.psystem, self.x, self.y)
+    --[[ render particle effects
+    --love.graphics.draw(self.psystem, self.x, self.y)
+    --]]
 end
 
 
@@ -75,10 +83,11 @@ end
 
 
 function Entity:takeDamage()
-    self.hp = self.hp - 1
-    -- particle effects for damage
-    self.psystem:setColors(1, 1, 1, 1, .3, .5, .2, 0)
+    self.currentHP = self.currentHP - 1
+    --[[ particle effects for damage
+    self.psystem:setColors(SILVER, LIGHT_BLUE)
     self.psystem:emit(64)
+    ]]
 end
 
 
@@ -93,7 +102,7 @@ function Entity:fire(projectiles, dt, dy, dir)
     -- set projectile.y based on whether its from player(up) or enemy(down)
     local tempY
     if dir == 'up' then
-        tempY = self.y - 1
+        tempY = self.y - SPRITE_SIZE
     else
         tempY = self.y + SPRITE_SIZE
     end

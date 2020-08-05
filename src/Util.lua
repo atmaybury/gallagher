@@ -21,6 +21,7 @@ function GenerateQuads(atlas, tilewidth, tileheight)
             sheetCounter = sheetCounter + 1
         end
     end
+    print(sheetCounter)
 
     return spritesheet
 end
