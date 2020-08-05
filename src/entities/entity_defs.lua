@@ -75,7 +75,7 @@ ENTITY_DEFS = {
 
     -- player-medium
     ['player-medium'] = {
-        hp = 3,
+        hp = 5,
         animations = {
             ['straight'] = {
                 texture = 'player-medium',

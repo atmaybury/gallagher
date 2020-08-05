@@ -9,7 +9,7 @@ StartState = Class{__includes = BaseState}
 
 function StartState:init()
     gSounds['music-woo']:setLooping(true)
-    --gSounds['music-woo']:play()
+    gSounds['music-woo']:play()
 end
 
 

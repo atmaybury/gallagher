@@ -26,16 +26,14 @@ function Entity:init(def)
     self.hp = def.hp
     self.currentHP = self.hp
 
-    --[[
-    -- particle effect system
-    self.psystem = love.graphics.newParticleSystem(gTextures['particle'], 64)
-    self.psystem:setParticleLifetime(1, 3)
-    self.psystem:setLinearAcceleration(-15, -WORLD_SPEED, 15, 0)
-    self.psystem:setEmissionArea('normal', 10, 10)
-    ]]
+    self.invulnerable = false
+    self.invulnerableTimer = 0
 
-    --self.cooldown = 1 / FIRING_RATE
-    self.cooldown = .2
+    self.flashing = false
+    self.flashTimer = 0
+
+    -- time to wait between firing
+    self.cooldown = 1 / FIRING_RATE
     -- starts at cooldown value so can always shoot immediately
     self.cooldownTimer = self.cooldown
 end
@@ -43,30 +41,41 @@ end
 
 function Entity:update(dt)
     if self.currentAnimation then self.currentAnimation:update(dt) end
-    --[[
-    self.psystem:update(dt)
-    ]]
 
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
 
-    --[[
-    if self.dx < 0 then
-        self:changeAnimation('left')
-    elseif self.dx > 0 then
-        self:changeAnimation('right')
+    -- flash when damaged
+    if self.flashing then
+        self.flashTimer = self.flashTimer + dt
+        if self.flashTimer > FLASH_DURATION then
+            self.flashing = false
+            self.flashTimer = 0
+        end
     end
-    ]]
+
+    -- brief invulnerability for conatct between entities
+    if self.invulnerable then
+        self.invulnerableTimer = self.invulnerableTimer + dt
+
+        if self.invulnerableTimer > INVULNERABLE_DURATION then
+            self.invulnerable = false
+            self.invulnerableTimer = 0
+        end
+    end
 end
 
 
 function Entity:render()
+    -- draw sprite slightly transparent while invulnerable
+    if self.flashing then
+        love.graphics.setColor(1, 1, 1, .25)
+    -- set color back to light green
+    else love.graphics.setColor(unpack(GREEN4)) end
+
     -- render sprite
     local anim = self.currentAnimation
     love.graphics.draw(gTextures[anim.texture], gFrames[anim.texture][anim:getCurrentFrame()], self.x, self.y)
-    --[[ render particle effects
-    --love.graphics.draw(self.psystem, self.x, self.y)
-    --]]
 end
 
 
@@ -77,6 +86,7 @@ function Entity:collides(target)
     elseif self.y > target.y + target.height or target.y > self.y + self.height then
         return false
     else
+        self.flashing = true
         return true
     end
 end
@@ -84,10 +94,6 @@ end
 
 function Entity:takeDamage()
     self.currentHP = self.currentHP - 1
-    --[[ particle effects for damage
-    self.psystem:setColors(SILVER, LIGHT_BLUE)
-    self.psystem:emit(64)
-    ]]
 end
 
 

@@ -57,7 +57,8 @@ function Enemy:hit(entities, i)
         gSounds['enemy-destroy']:play()
         -- give points for destroyed enemies, as long as they are not destroyed on screen exit
         if self.y < BOTTOM_EDGE then
-            score = score + 1
+            kills = kills + 1
+            score = score + accuracy
         end
         self:destroy(entities, i)
 
