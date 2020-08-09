@@ -1,5 +1,5 @@
 --[[
-    FINAL PROJECT
+GALLAGHER    FINAL PROJECT
     2020
 
     -- entities/Player --
@@ -25,9 +25,8 @@ end
 function Player:hit()
     self:takeDamage()
     if self.currentHP == 0 then
-        --TODO: GameOverState()
         gStateStack:pop()
-        gStateStack:push(StartState)
+        gStateStack:push(GameOverState)
         print('death')
     end
 end

@@ -16,7 +16,6 @@ function PlayState:init()
     self.entitySpawner = EntitySpawner{}
     self.enemies = {}
     self.projectiles = {}
-    self.explosions = {}
     
     kills = 0
     self.hits = 0
@@ -144,7 +143,8 @@ function PlayState:update(dt)
         if self.player:collides(projectile) then
             self.player:hit()
             projectile:destroy(self.projectiles, j)
-            gSounds['start']:play()
+            gSounds['player-destroy']:stop()
+            gSounds['player-destroy']:play()
         end
         
         -- projectile/enemy
@@ -174,8 +174,6 @@ function PlayState:update(dt)
                 self.player.invulnerable = true
                 enemy:hit(self.enemies, k)
                 self.player:hit()
-                gSounds['start']:stop()
-                gSounds['start']:play()
             end
         end
     end
