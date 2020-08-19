@@ -1,6 +1,6 @@
 # Gallagher
-By Andrew Maybury
-Final Project for GD50
+By Andrew Maybury  
+Final Project for GD50  
 2020
 
 Gallagher is an attempt to make a basic version of Galaga, the classic arcade game.
