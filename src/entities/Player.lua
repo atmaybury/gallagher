@@ -26,7 +26,7 @@ function Player:hit()
     self:takeDamage()
     if self.currentHP == 0 then
         gStateStack:pop()
-        gStateStack:push(GameOverState)
+        gStateStack:push(GameOverState())
         print('death')
     end
 end
