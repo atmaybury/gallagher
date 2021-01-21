@@ -23,17 +23,6 @@ function PlayState:init()
     accuracy = 0
     score = 0
     
-    --[[ init player
-    local def = ENTITY_DEFS['player']
-    self.player = Player {
-        animations = def.animations,
-        x = VIRTUAL_WIDTH / 2 - SPRITE_SIZE / 2,
-        y = BOTTOM_EDGE - (SPRITE_SIZE * 3),
-        hp = def.hp
-    }
-    ]]
-    
-    --
     local def = ENTITY_DEFS['player-medium']
     self.player = Player {
         animations = def.animations,
